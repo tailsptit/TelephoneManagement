@@ -42,30 +42,13 @@ public class CustomerRepository {
         }
     }
 
-    public Map<String, Object> view(final String id) {
-        GetResponse getResponse = client.prepareGet("customers", "phone", id).get();
-        System.out.println(getResponse.getSource());
-        return getResponse.getSource();
-    }
-
-    public Map<String, Object> searchCustomerByName(final String field) {
-        Map<String, Object> map = null;
-        SearchResponse response = client.prepareSearch("customers")
-                .setTypes("phone")
-                .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                .setQuery(prefixQuery("name", field))
-                .get();
-        List<SearchHit> searchHits = Arrays.asList(response.getHits().getHits());
-        map = searchHits.get(0).getSourceAsMap();
-        return map;
-    }
-
     public List<Customer> searchCustomerByPhone(String prefix) {
         int scrollSize = 100;
         List<Customer> results = new ArrayList<>();
         SearchResponse searchResponse = client.prepareSearch("customers")
                 .setScroll(new TimeValue(60000))
                 .setTypes("phone")
+                .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                 .setQuery(prefixQuery("phone", prefix))
                 .setSize(scrollSize)
                 .execute()

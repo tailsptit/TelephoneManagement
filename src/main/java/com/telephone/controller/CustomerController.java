@@ -24,19 +24,19 @@ public class CustomerController {
 
     @PostMapping("/create")
     public String create(@RequestBody Customer customer) {
-        logger.info("API POST - create is called");
+        logger.info("POST API: Create a new customer");
         return customerRepository.create(customer);
     }
 
     @GetMapping("search/phone/{prefix}")
     public List<Customer> searchCustomerByPhone(@PathVariable final String prefix) {
-        logger.info("API GET - searchCustomerByPhone is called");
+        logger.info("GET API: Retrieve a customer by phone prefix");
         return customerRepository.searchCustomerByPhone(prefix);
     }
 
     @GetMapping("/delete/{phone}")
     public String delete(@PathVariable final String phone) {
-        logger.info("API DELETE - search/name is called");
+        logger.info("DELETE API: Delete a customer by phone");
         return customerRepository.delete(phone);
     }
 }
