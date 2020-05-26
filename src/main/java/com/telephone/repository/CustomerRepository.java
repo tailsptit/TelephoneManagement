@@ -63,7 +63,7 @@ public class CustomerRepository {
             searchResponse = client.prepareSearchScroll(searchResponse.getScrollId()).setScroll(new TimeValue(60000)).get();
         } while (searchResponse.getHits().getHits().length != 0);
 
-        System.out.println("Number of customer match is = " + results.size());
+        System.out.println("Number of customers matching is = " + results.size());
         return results;
     }
 

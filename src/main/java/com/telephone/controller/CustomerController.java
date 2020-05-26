@@ -22,7 +22,7 @@ public class CustomerController {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @PostMapping("/create")
+    @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     public String create(@RequestBody Customer customer) {
         logger.info("POST API: Create a new customer");
         return customerRepository.create(customer);
