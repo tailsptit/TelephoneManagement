@@ -40,7 +40,7 @@ public class CustomerRepository {
                             .endObject()
                     )
                     .get();
-            logger.info("response id: " + response.getId());
+//            logger.info("response id: " + response.getId());
             return response.getResult().toString();
         } catch (IOException e) {
             return e.toString();

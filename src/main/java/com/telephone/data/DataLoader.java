@@ -34,25 +34,13 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        genCustomersFile();
-        logger.info("Insert data to ElasticSearch");
-        List<Customer> customers = this.loadCustomersFromFile();
-        customers.forEach(customerService::create);
-        logger.info("Complete to insert data to ElasticSearch");
-    }
-
-    private void genCustomersFile(){
-        try {
-            Map<String, String> customer = new HashMap<>();
-
-            customer.put("name", "TaiLS");
-            customer.put("phone", "0");
-            Writer writer = new FileWriter("./../customers_.json");
-            new Gson().toJson(customer, writer);
-            writer.close();
-        } catch (IOException e){
-            System.out.println(e.toString());
-        }
+        int num = 5;
+        int rows = (int) Math.pow(10, num);
+        logger.info("Insert " + rows + " record of data to ElasticSearch");
+        genCustomers("84123456789", num);
+//        List<Customer> customers = this.loadCustomersFromFile();
+//        customers.forEach(customerService::create);
+        logger.info("Complete to insert " + rows + " record of data to ElasticSearch");
     }
 
     private List<Customer> loadCustomersFromFile() throws IOException {
@@ -60,6 +48,21 @@ public class DataLoader implements CommandLineRunner {
         CollectionType collectionType = TypeFactory.defaultInstance().constructCollectionType(List.class, JsonCustomer.class);
         List<JsonCustomer> customers = objectMapper.readValue(this.customersJsonFile.getFile(), collectionType);
         return customers.stream().map(this::from).collect(Collectors.toList());
+    }
+
+    private void genCustomers(String phone, int num) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        CollectionType collectionType = TypeFactory.defaultInstance().constructCollectionType(List.class, JsonCustomer.class);
+        Customer customer = new Customer();
+        String prefixPhone = phone.substring(0, 11 - num);
+        String prefixName = "TaiLS_" + prefixPhone;
+        String suffixPhone;
+        for (int i = 0; i < Math.pow(10, num); i++) {
+            suffixPhone = String.format("%0" + num + "d", i);
+            customer.setName(prefixName + suffixPhone);
+            customer.setPhone(prefixPhone + suffixPhone);
+            customerService.create(customer);
+        }
     }
 
     private Customer from(JsonCustomer jsonCustomer) {

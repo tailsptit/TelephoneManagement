@@ -41,7 +41,8 @@ public class Config {
         try {
             final Settings elasticsearchSettings = Settings.builder()
                     .put("cluster.name", clusterName)
-                    .put("client.transport.sniff", true)
+                    .put("client.transport.sniff", false)
+                    .put("client.transport.ignore_cluster_name", true)
                     .build();
             logger.info("host:" + host + "port:" + port);
             client = new PreBuiltTransportClient(elasticsearchSettings).
