@@ -37,7 +37,7 @@ public class DataLoader implements CommandLineRunner {
         int num = 5;
         int rows = (int) Math.pow(10, num);
         logger.info("Insert " + rows + " record of data to ElasticSearch");
-        genCustomers("84123456789", num);
+//        genCustomers("84123456789", num);
 //        List<Customer> customers = this.loadCustomersFromFile();
 //        customers.forEach(customerService::create);
         logger.info("Complete to insert " + rows + " record of data to ElasticSearch");
